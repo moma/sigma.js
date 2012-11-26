@@ -1,3 +1,85 @@
+
+CONFIGURATION
+give correspondance between gexf fields and program var. Example on the test gexf
+
+---------------------
+  view: "macro",
+  bipartite_categories_field:'category',
+  category_a_label: "Keywords",
+  category_b_label: "Scholars",
+  category: "Document",
+  selected_nodes: "",
+  search: "",
+  a_node_size: 0.50,
+  b_node_size: 0.50,
+  cursor_size: 0.50,
+  a_edge_filter_min: 0.0,
+  a_edge_filter_max: 1.0,
+  a_node_filter_min: 0.0,
+  a_node_filter_max: 1.0,
+  b_edge_filter_min: 0.0,
+  b_edge_filter_max: 1.0,
+  b_node_filter_min: 0.0,
+  b_node_filter_max: 0.9,
+----------
+
+
+Features:
+
+NEW VAR ?
+- VAR 'selected_nodes' : as a list which will command which sigma which nodes are highlighted (ex http://sigmajs.org/examples/parse_data.html the selection is 'the node hover + all its neighbors')
+- VAR 'displayed_nodes' : a list of nodes which are displayed on the screen. This is a primary filter.
+
+BEHAVIOR:
+- if 'displayed_nodes' is empty, all nodes are displayed, if not, only nodes in 'displayed_nodes' are displayed on the screen,
+- if 'selected_nodes' is empty, all nodes within 'displayed_nodes' are displayed normally, if not, only the id of the selected nodes are displayed normally, others are shadded like on http://sigmajs.org/examples/parse_data.html, 
+
+
+TWO MODES: 
+macro and meso, the following functions might have different behaviors according to the type to view.
+
+
+
+NODE SELECTION
+- on clic on a node : add the node id to the 'selected_nodes' if it is not into it, remove it if it belongs to it,
+-  circular selection area: define with a slider the radius of the selection area (like in tina). All node in the selection area are selected on a clic (and added or removed from the 'selected_nodes'. 
+- Visually represent the selected area as  a transparent circle, 
+- unselect button: empty 'selected_nodes'
+- center button: reset original view
+
+
+SEARCH
+add a search box to easily identify nodes
+
+arguments:
+- search within 'displayed_nodes' in the gexf field 'label' (defaults) or choose a string attribute to search within (additional argument).
+- exact search as an option
+behavior:
+- if search is empty, do noting,
+- if not empty: 1) empty 'selected_nodes', fill 'selected_nodes' with search results ids,
+
+Node Filter
+- two sliders like in tina which remove from 'displayed_nodes' those who relative 'node weight'/'edge weight'  is more/less than filter values,
+
+
+FUNCTION Select category (close to the search function):
+-input1: a gexf attribute which defines a partition (e.g. category, modularity_class)
+- input2: one of the items: e.g. Documents
+
+Behavior: filter nodes of this category: replace 'displayed_nodes' by nodes of this category, and 'selected_nodes' by the intersection between 'selected_nodes' and  'displayed_nodes', 
+
+
+
+
+BUTTON Macro/Meso
+- input: 
+
+When clic on meso: replace 'displayed_nodes' by 'selected_nodes' + their neighbors in the 
+
+
+
+
+
 ****   Bugs   ****
   - mouseEnabled==false && hover
 
@@ -10,13 +92,4 @@
     everything looks fine to execute
     sigma.js, and false else (like if
     Canvas is not supported)
-  - Testing for the following classes:
-    > Chronos
-    > Sigma
-    > Graph (coherence)
 
-****   Others   ****
-  - Implement multitouch features           - Next version
-  - Change the code such as it is possible
-    to use the MINIFY_ADVANCED Closure
-    option.
